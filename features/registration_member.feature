@@ -2,7 +2,7 @@ Feature: registration_member
 
   Scenario: a user should be able to registrate
     Given I go to /
-    When I click "Register a new membership"
+    When I click "Register yourself"
     Then I should be in "/members/new"
     When I write "Gabriel Alves" on "member_name"
     When I write "gabriel@gmail.com" on "member_email"
