@@ -10,7 +10,7 @@ Feature: registration_member
     When I write "testtest" on "member_password"
     When I write "testtest" on "member[password_confirmation]"
     When I click button "Register"
-    Then I should be in "/login"
+    Then I should be in "Gabriel Alves" homepage
     And the object with attribute "name" and value "Gabriel Alves" of "member" klass was created
 
   Scenario: a user tries to log in without confirmation
