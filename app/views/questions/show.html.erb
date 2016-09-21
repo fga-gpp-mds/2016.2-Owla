@@ -8,3 +8,5 @@
     <td><%= @question.content%></td>
   </tr>
 </table>
+
+<%= link_to 'New Answer', new_question_answer_path(@question.id), class: 'btn btn-sm btn-success' %>
