@@ -1,15 +1,12 @@
-<h1> Member </h1>
+<div id="profile-photo">
+        <%= image_tag (current_member.avatar.url(:thumb)), class: "img-circle", id: "show-member" %>
+</div>
 
-<table>
-  <thead>
-    <th>Name</th>
-    <th>Email</th>
-    <th>Alias</th>
-  </thead>
-  <tr>
-    <td><%= @member.name%></td>
-    <td><%= @member.email%></td>
-    <td><%= @member.alias%></td>
-    <td><%= image_tag(current_member.avatar.url(:thumb)) %></td>
-  </tr>
-</table>
+<div class="member-info">
+  <table id="member-attributes">
+    <tr><td><%= @member.name%></td></tr>
+    <tr><td><%= @member.email%></td></tr>
+    <tr><td><%= @member.alias%></td></tr>
+    <tr><td><%= link_to "Edit", edit_member_path(@member), class: "btn btn-info", id: "edit-path" %></td></tr>
+  </table>
+</div>
