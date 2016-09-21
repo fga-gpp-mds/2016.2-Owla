@@ -31,7 +31,7 @@ gem "codeclimate-test-reporter", group: :test, require: nil
 
 group :cucumber do
   gem 'capybara',               '~> 2.2'
-  gem 'cucumber-rails',         '~> 1.4.2', :require => false
+  gem 'cucumber-rails',         '~> 1.4.2'
   gem 'database_cleaner',       '~> 1.3'
   gem 'selenium-webdriver',     '>= 2.53'
   gem 'chromedriver-helper' if ENV['SELENIUM_DRIVER'] == 'chrome'
