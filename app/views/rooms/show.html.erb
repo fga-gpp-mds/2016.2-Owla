@@ -28,7 +28,7 @@
           <!-- timeline time label -->
           <li class="time-label">
                 <span class="bg-yellow">
-                  <i class="fa fa-calendar-minus-o bg-white"></i> 
+                  <i class="fa fa-calendar-minus-o bg-white"></i>
                   <%= date.strftime('%m/%d/%Y') %>
                 </span>
           </li>
@@ -49,7 +49,7 @@
                 </div>
                 <div class="timeline-footer">
                   <%= link_to "Enter", topic_path(topic), class:"btn btn-primary btn-xs" %>
-                  <a class="btn btn-danger btn-xs">Delete</a>
+                  <%= link_to 'Delete', topic, method: :delete, data: {confirm: 'Are you sure?'}, class: "btn btn-danger btn-xs" %>
                 </div>
               </div>
             <li>
