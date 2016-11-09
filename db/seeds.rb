@@ -12,16 +12,28 @@ puts "Creating Victor Navarro User"
 member = Member.create!(name: 'Victor Navarro', alias: 'vi',
 email: 'victor@gmail.com', password: 'testtest', password_confirmation: 'testtest')
 
+puts "Creating Alax Alves User"
+member2 = Member.create!(name: 'Alax Alves', alias: 'alax',
+email: 'alax@gmail.com', password: 'testtest', password_confirmation: 'testtest')
+
+puts "Creating Matheus Miranda User"
+member3 = Member.create!(name: 'Matheus Miranda', alias: 'mirandinhazika',
+email: 'matheus@gmail.com', password: 'testtest', password_confirmation: 'testtest')
+
+puts "Creating Sabrayna Santos User"
+member4 = Member.create!(name: 'Sabrayna Santos', alias: 'sabrayna',
+email: 'sabrayna@gmail.com', password: 'testtest', password_confirmation: 'testtest')
+
 puts "Creating Luan Guimarães User"
-member2 = Member.create!(name: 'Luan Guimarães', alias: 'lu',
+member5 = Member.create!(name: 'Luan Guimarães', alias: 'lu',
 email: 'luan@gmail.com', password: 'testtest', password_confirmation: 'testtest')
 
 puts "Creating Jessica Cristina User"
-member3 = Member.create!(name: 'Jéssica Cristina', alias: 'je',
+member6 = Member.create!(name: 'Jéssica Cristina', alias: 'je',
 email: 'jessica@gmail.com', password: 'testtest', password_confirmation: 'testtest')
 
 puts "Creating Vitor Barbosa User"
-member4 = Member.create!(name: 'Vitor Barbosa', alias: 'vivi',
+member7 = Member.create!(name: 'Vitor Barbosa', alias: 'vivi',
 email: 'vitor@gmail.com', password: 'testtest', password_confirmation: 'testtest')
 
 
@@ -35,9 +47,10 @@ room2 =member2.my_rooms.create!(name: 'Fundamentos de Sistemas Distribuidos', de
 puts "Creating Palestra Empreendendo sua ideia room"
 room3 = member.my_rooms.create!(name: 'Palestra Empreendendo sua Ideia', description: 'Palestrante José Joaquim')
 
-
 #APPENDING ROOMS TO MEMBERS
-puts "#{room.name} to #{member4.name}, #{member.name}, and #{member4.name}"
+puts "#{room.name} to #{member.name}, #{member3.name}, #{member4.name}, #{member5.name}, #{member6.name}"
+member6.rooms << room
+member5.rooms << room
 member4.rooms << room
 member3.rooms << room
 member.rooms << room

@@ -1,6 +1,7 @@
 class AnswersController < ApplicationController
   skip_before_action :verify_authenticity_token if Rails.env.test?
   before_action :authenticate_member
+  before_action :show, :only => [:like]
 
   def index
     @answers = Answer.all
@@ -36,9 +37,13 @@ class AnswersController < ApplicationController
   def update
     @answer = Answer.find(params[:id])
 
+    if params[:delete_attachment]
+      delete_attachment @answer
+    end
+
     if @answer.update_attributes(answer_params)
       flash[:success] = "Answer updated"
-      redirect_to topic_path(@question.topic)
+      redirect_to topic_path(@answer.question.topic)
     else
       render 'edit'
     end
@@ -49,6 +54,16 @@ class AnswersController < ApplicationController
     @question = @answer.question
     @answer.destroy
     redirect_to question_answers_path(@question)
+  end
+
+  def like
+    @answer.member = current_member
+    if not current_member.voted_up_on? @answer
+      @answer.like_by(current_member)
+    else
+      @answer.disliked_by(current_member)
+    redirect_to :back
+    end
   end
 
   def moderate_answer
@@ -63,7 +78,12 @@ class AnswersController < ApplicationController
   end
 
   private
+
     def answer_params
-      params.require(:answer).permit(:content, :question_id, :anonymous)
+      params.require(:answer).permit(:content, :question_id, :anonymous, :attachment)
+    end
+
+    def delete_attachment answer
+      answer.attachment.destroy
     end
 end

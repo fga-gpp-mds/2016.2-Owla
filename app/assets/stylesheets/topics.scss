@@ -2,6 +2,49 @@
 // They will automatically be included in application.css.
 // You can use Sass (SCSS) here: http://sass-lang.com/
 
+.dropdown-menu {
+  left: -9em !important;
+}
+
+#room-blacklist {
+  margin: 1% 0 0 25%;
+}
+
+#reintegrate-member {
+  padding-left: 20%;
+}
+
 #Buttonflag {
   top: -13px;
+}
+
+/*.move_date_answer {
+	margin-left: 41%;
+}
+
+.heart-question-answer {
+	margin-left: 97.75%;
+	margin-top: -18%;
+}
+
+.count-question-view {
+	margin-left: 81%;
+}
+
+.edit-class-botton {
+	margin-left: 68%;
+	margin-top: -9%;
+}
+
+#like_button {
+	/*margin-top: -1%;
+    float: right;
+}
+
+#id_name_user {
+	margin-left: 5%;
+}*/
+
+#like_button {
+    float: right;
 }

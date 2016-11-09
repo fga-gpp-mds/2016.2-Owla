@@ -24,14 +24,34 @@
           <%= form_for @question, url: @url do |question| %>
             <!-- textarea -->
             <div class="form-group">
-              <%= question.text_area :content, class:"form-control", placeholder: @placeholder_content %>
+              <%= question.text_area :content, class: "form-control", placeholder: @placeholder_content %>
             </div>
 
             <%= question.check_box :anonymous %>
             <%= question.label :anonymous %>
 
-            <%= button_tag(type: "submit", class: "btn btn-app pull-right") do %>
-                <i class="fa fa-save"></i>
+            <div class="form-group has-feedback" id="question-attachment-box">
+              <% if @question.attachment? %>
+                <span>
+                  <i class='fa fa-paperclip'></i>
+                  <%= @question.attachment_file_name %>
+                </span>
+              <% end %>
+
+              <%= link_to "Manage attachment", "#", class: 'btn btn-primary', id: 'edit-attachment-button', remote: true %>
+            </div>
+
+            <%= question.file_field :attachment, class: 'form-control hidden', id: 'question-attachment-link' %>
+
+            <% if @question.attachment? %>
+              <label class='hidden' id="delete-attachment-label">
+                <%= check_box_tag 'delete_attachment', 1, false %>
+                Delete attachment?
+              </label>
+            <% end %>
+
+            <%= button_tag(type: "submit", class: "btn btn-app pull-right", id: 'submit-question-button') do %>
+              <i class="fa fa-save"></i>
             <% end %>
           <% end %>
         </div>

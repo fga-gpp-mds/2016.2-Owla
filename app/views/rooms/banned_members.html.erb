@@ -1,0 +1,10 @@
+<h1> Room's Blacklist </h1>
+
+<table id="room-blacklist">
+  <% @banned_members.each do |member_id| %>
+    <tr>
+      <td id="member-name"><%= "#{Member.find(member_id).name}" %></td>
+      <td id="reintegrate-member"><%= link_to "Reintegrate Member", reintegrate_member_url({id: params[:id], member_id: member_id}), class: 'btn btn-sm btn-success', method: :post %></td>
+    </tr>
+  <% end %>
+</table>

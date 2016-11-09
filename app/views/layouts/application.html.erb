@@ -18,10 +18,16 @@
           <%= render "/layouts/header" %>
         </div>
 
+
         <% if logged_in? %>
           <%= render '/layouts/sidebar' %>
 
           <div class="content-wrapper">
+            <div class="flash-conteiner">
+              <% flash.each do |key, value| %>
+                <div class="alert alert-<%= key %>"><%= value %></div>
+              <% end %>
+            </div>
             <%= yield %>
           </div>
         <% else %>

@@ -1,0 +1,14 @@
+<h1>New Tag</h1>
+<% if flash[:alert] %>
+    <div class="notice"><%= flash[:alert] %></div>
+<% end %>
+<%= form_for @tag, url: question_tags_path(@question.id) do |m| %>
+<% if !@tag.errors.empty? %>
+	<%= @tag.errors.full_messages %>
+  	<% end %>
+	<%= m.label :content, "Content" %>
+	<%= m.text_field :content %>
+	<br>
+  <br>
+	<%= m.submit "New Tag" %>
+<% end %>

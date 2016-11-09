@@ -6,6 +6,7 @@ class QuestionTest < ActiveSupport::TestCase
     @member = Member.create(name: "Linus Torvalds", alias: "Lineu", email: "linuxFTW@linux.com", password: "i<3linux", password_confirmation: "i<3linux")
     @room = Room.create(name: "c1", description: "-"*2, owner: @member)
     @topic = @room.topics.create(name: "Limite", description: "example description")
+    @file = File.new('test/fixtures/sample_files/file.pdf')
   end
 
   test "should not save a question with a null name" do
@@ -62,4 +63,34 @@ class QuestionTest < ActiveSupport::TestCase
     q = Question.new
     assert_equal false, q.anonymous
   end
+
+  test "should save question with no attachment" do
+    question = @topic.questions.new(content: "What is love?", member: @member)
+    assert question.save
+
+    question = @topic.questions.new(content: "What is love?", member: @member, attachment: "")
+    assert question.save
+  end
+
+  test "should save question with an attachment" do
+    question = @topic.questions.new(content: "What is love?", member: @member, attachment: @file)
+    assert question.save
+  end
+
+  test "should save question with correct type of attachment" do
+    %w[docx jpeg jpg odp ods odt pdf png ppt pptx xls xlsx].each do |extension|
+      file = File.new("test/fixtures/sample_files/file.#{extension}")
+      question = @topic.questions.new(content: "What is love?", member: @member, attachment: file)
+      assert question.save
+    end
+  end
+
+  test "should not save question with wrong type of attachment" do
+    another_file = File.new('test/fixtures/answers.yml')
+    question = @topic.questions.new(content: "What is love?", member: @member, attachment: another_file)
+    assert_not question.save
+  end
+
+  # FIXME download
+
 end

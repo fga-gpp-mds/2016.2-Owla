@@ -1,0 +1,48 @@
+<div class="search-results">
+  <div class="rooms">
+    <h2>Rooms</h2>
+    <% if @rooms.empty? %>
+      <h3>There are no rooms that matches your search.</h3>
+    <% else %>
+      <% @rooms.each do |room| %>
+        <div class="room">
+          <table>
+            <tr><td><%= link_to "#{room.name}", "#"%></td></tr>
+            <tr><td><%= room.description %></td></tr>
+          </table>
+        </div>
+      <% end %>
+    <% end %>
+    </div>
+
+  <div class="topics">
+    <h2>Topics</h2>
+    <% if @topics.empty? %>
+      <h3>There are no topics that matches your search.</h3>
+    <% else %>
+      <% @topics.each do |topic| %>
+      <div class="topic">
+        <table>
+          <tr><td><%= link_to "#{topic.name}", topic_path(topic) %></td></tr>
+          <tr><td> In room <%= link_to("#{topic.room.name}", room_path(topic.room)) %></td></tr>
+        </table>
+      </div>
+      <% end %>
+    <% end %>
+  </div>
+
+  <div class="people">
+    <h2>People</h2>
+      <% if @members.empty? %>
+        <h3>There is no person that matches your search.</h3>
+      <% else %>
+        <% @members.each do |member| %>
+        <div class="person">
+          <table>
+            <tr><td><%= link_to "#{member.name}", member_path(member) %></tr></td>
+          </table>
+          <% end %>
+        </div>
+      <% end %>
+  </div>
+</div>

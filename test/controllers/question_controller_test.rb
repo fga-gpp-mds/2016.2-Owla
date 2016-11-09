@@ -14,7 +14,9 @@ class QuestionControllerTest < ActionDispatch::IntegrationTest
     @topic = @room.topics.new(name: "limites", description: "description1")
     @topic.save
 
-    @question = @topic.questions.new(content: "How did I get here?")
+    attachment = fixture_file_upload('test/fixtures/sample_files/file.png', 'image/png')
+
+    @question = @topic.questions.new(content: "How did I get here?", attachment: attachment)
     @question.member = @member
     @question.save
 
@@ -119,6 +121,16 @@ class QuestionControllerTest < ActionDispatch::IntegrationTest
 
   end
 
+  test "question should have one like after button click" do
+    post "/questions/#{@question.id}/like"
+    assert_equal 1, @question.votes_for.size
+  end
+
+  test "boolean attribute should change"  do 
+    post "/questions/#{@question.id}/like"
+    assert @question.upvote_by(@member), true
+  end
+  
   test "only room owner should moderate question" do
     @member2 = Member.create(name: "Thalissonn", alias: "thalissonn", email: "thalissnon@gmail.com", password: "12345678", password_confirmation: "12345678")
     sign_out_as @member
@@ -134,6 +146,64 @@ class QuestionControllerTest < ActionDispatch::IntegrationTest
     @question.reload
     assert_equal true, @question.moderated?
     assert_equal "This question has been moderated because it's content was considered inappropriate", @question.content
+  end
+
+  test "should upload attachment when question is created" do
+    attachment = fixture_file_upload('test/fixtures/sample_files/file.png', 'image/png')
+
+    assert_difference('Question.count') do
+      post "/topics/#{@topic.id}/questions", params: {
+        question: {
+          content: "Question test",
+          attachment: attachment
+        }
+      }
+    end
+
+  end
+
+  test "should not upload wrong type of attachment" do
+    wrong_attachment = fixture_file_upload('test/fixtures/answers.yml', 'application/yaml')
+
+    old_question = Question.last
+
+    post "/topics/#{@topic.id}/questions", params: {
+      question: {
+        content: "Testing wrong attachment",
+        attachment: wrong_attachment
+      }
+    }
+
+    assert_equal old_question, Question.last
+  end
+
+  test "should delete attachment from question if option is marked" do
+    question = Question.last
+
+    patch "/questions/#{question.id}", params: {
+      question: {
+        content: "new question content"
+      },
+      delete_attachment: true
+    }
+
+    question.reload
+
+    assert_not question.attachment?
+  end
+
+  test "should not delete attachment if option is not marked" do
+    question = Question.last
+
+    patch "/questions/#{question.id}", params: {
+      question: {
+        content: "new question content"
+      }
+    }
+
+    question.reload
+
+    assert question.attachment?
   end
 
 end

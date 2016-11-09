@@ -5,26 +5,28 @@ class AnswersControllerTest < ActionDispatch::IntegrationTest
   def setup
     @member = Member.create(name: "Thalisson", alias: "thalisson", email: "thalisson@gmail.com", password: "12345678", password_confirmation: "12345678")
     @member_wrong = Member.create(name: "Thalisson2", alias: "thalisson2", email: "thalisson2@gmail.com", password: "12345678", password_confirmation: "12345678")
-    
+
     @room = Room.new(name: "calculo 1", description: "teste1")
     @room.owner = @member
     @room.save
-    
+
     @room_wrong = Room.new(name: 'calc2', description: 'teste2')
     @room_wrong.owner = @member_wrong
     @room_wrong.save
-    
+
     @topic = @room.topics.new(name: "limites", description: "description1")
     @topic.save
 
     @topic_wrong = @room_wrong.topics.new(name: 'edo', description: 'teste2')
     @topic_wrong.save
-    
+
     @question = @topic.questions.new(content: "How did I get here?")
     @question.member = @member
     @question.save
 
-    @answer = Answer.new(content: "CONTENT TEST")
+    attachment = fixture_file_upload('test/fixtures/sample_files/file.png', 'image/png')
+
+    @answer = Answer.new(content: "CONTENT TEST", attachment: attachment)
     @answer.member = @member
     @answer.question = @question
     @answer.anonymous = false
@@ -142,6 +144,16 @@ class AnswersControllerTest < ActionDispatch::IntegrationTest
     assert_equal answer_name, @answer.member.name
   end
 
+  test "answer should have one like after button click" do
+    post "/answers/#{@answer.id}/like"
+    assert_equal 1, @answer.votes_for.size
+  end
+
+  test "boolean attribute for answer should change" do 
+    post "/answers/#{@answer.id}/like"
+    assert @answer.liked_by(@member), true
+  end
+
   test 'only room owner should change moderated attribute of an answer' do
     @not_owner_member = Member.create(name: "Thalisson2", alias: "thalisson2", email: "thalisson2@gmail.com", password: "123456789", password_confirmation: "123456789")
     sign_out_as @member
@@ -157,19 +169,102 @@ class AnswersControllerTest < ActionDispatch::IntegrationTest
     sign_in_as @not_owner_member
     post "/moderate_answer/#{@answer.id}"
     @answer.reload
-    assert_not_equal "This answer has been moderated because it's content was considered inappropriate", @answer.content 
+    assert_not_equal "This answer has been moderated because it's content was considered inappropriate", @answer.content
   end
 
   test 'should change the message after moderating' do
     post "/moderate_answer/#{@answer.id}"
     @answer.reload
-    assert_equal "This answer has been moderated because it's content was considered inappropriate", @answer.content 
+    assert_equal "This answer has been moderated because it's content was considered inappropriate", @answer.content
   end
 
   test 'boolean attribute moderated should change after moderated' do
     post "/moderate_answer/#{@answer.id}"
     @answer.reload
     assert_equal true, @answer.moderated
+  end
+
+  test "should upload attachment when answer is created" do
+    attachment = fixture_file_upload('test/fixtures/sample_files/file.png', 'image/png')
+
+    assert_difference('Answer.count') do
+      post "/questions/#{@question.id}/answers", params: {
+        answer: {
+          content: "Answer test",
+          attachment: attachment
+        }
+      }
+    end
+
+  end
+
+  test "should not upload wrong type of attachment" do
+    wrong_attachment = fixture_file_upload('test/fixtures/answers.yml', 'application/yaml')
+
+    old_answer = Answer.last
+
+    post "/questions/#{@question.id}/answers", params: {
+      answer: {
+        content: "Testing wrong attachment",
+        attachment: wrong_attachment
+      }
+    }
+
+    assert_equal old_answer, Answer.last
+  end
+
+  test "should delete attachment from answer if option is marked" do
+    answer = Answer.last
+
+    patch "/answers/#{answer.id}", params: {
+      answer: {
+        content: "new question content"
+      },
+      delete_attachment: true
+    }
+
+    answer.reload
+
+    assert_not answer.attachment?
+  end
+
+  test "should not delete attachment if option is not marked" do
+    answer = Answer.last
+
+    patch "/answers/#{answer.id}", params: {
+      answer: {
+        content: "new question content"
+      }
+    }
+
+    answer.reload
+
+    assert answer.attachment?
+  end
+
+  test 'should answer be anonymous if the option is marked' do
+    post "/questions/#{@question.id}/answers", params: {
+      answer: {
+        content: 'answer content',
+        anonymous: true
+      }
+    }
+
+    answer = Answer.last
+
+    assert_equal answer.anonymous, true
+  end
+
+  test 'should answer not be anonymous if the option is not marked' do
+    post "/questions/#{@question.id}/answers", params: {
+      answer: {
+        content: 'answer content'
+      }
+    }
+
+    answer = Answer.last
+
+    assert_not_equal answer.anonymous, true
   end
 
 end

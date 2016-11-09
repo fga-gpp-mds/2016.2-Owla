@@ -51,4 +51,34 @@ class AnswerTest < ActiveSupport::TestCase
     after = @question.answers.count
     assert_equal before,after+1
   end
+
+  test "should save answer with no attachment" do
+    answer = @question.answers.create(content: "answer test", member: @member)
+    assert answer.save
+
+    answer = @question.answers.create(content: "answer test", member: @member, attachment: '')
+    assert answer.save
+  end
+
+  test "should save answer with an attachment" do
+    answer = @question.answers.create(content: "answer test", member: @member, attachment: @file)
+    assert answer.save
+  end
+
+  test "should save answer with correct type of attachment" do
+    %w[docx jpeg jpg odp ods odt pdf png ppt pptx xls xlsx].each do |extension|
+      file = File.new("test/fixtures/sample_files/file.#{extension}")
+      answer = @question.answers.create(content: "answer test", member: @member, attachment: file)
+      assert answer.save
+    end
+  end
+
+  test "should not save answer with wrong type of attachment" do
+    another_file = File.new('test/fixtures/answers.yml')
+    answer = @question.answers.create(content: "answer test", member: @member, attachment: another_file)
+    assert_not answer.save
+  end
+
+  # FIXME download
+
 end

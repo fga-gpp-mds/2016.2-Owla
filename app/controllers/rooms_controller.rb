@@ -1,6 +1,8 @@
 class RoomsController < ApplicationController
+
   skip_before_action :verify_authenticity_token if Rails.env.test?
   before_action :authenticate_member
+  before_action :is_owner, only: [:ban_member, :banned_members, :reintegrate_member]
 
   def index
     @rooms = Room.all
@@ -22,7 +24,9 @@ class RoomsController < ApplicationController
     member = current_member
     room = Room.find(params[:id])
 
-    if room.members.include?(member)
+    if(room.black_list.include?(current_member.id))
+      flash[:notice] = "You are not allowed to join this room"
+    elsif room.members.include?(member)
       flash[:notice] = "You are already registered in this room"
     else
       room.members << member
@@ -58,7 +62,6 @@ class RoomsController < ApplicationController
   end
 
   def create
-
     @room = Room.new(room_params)
     @room.owner = current_member
 
@@ -85,6 +88,29 @@ class RoomsController < ApplicationController
     @room.destroy
 
     redirect_to member_rooms_path(current_member)
+  end
+
+  def ban_member
+      member = Member.find(params[:member_id])
+      topic = Topic.find(params[:topic_id])
+      room = topic.room
+      room.update_attribute(:black_list, room.black_list << member.id)
+      room.members.delete(member)
+      flash[:notice] = "The member was banned from your room"
+      redirect_to topic_path topic
+  end
+
+  def banned_members
+    room = Room.find(params[:id])
+    @banned_members = Member.where(id: room.black_list)
+  end
+
+  def reintegrate_member
+    @room = Room.find(params[:id])
+    @room.black_list.delete(params[:member_id].to_i)
+    @room.save
+    flash[:notice] = "Member has been removed from black list and can now join the room"
+    redirect_to banned_members_url
   end
 
   private
