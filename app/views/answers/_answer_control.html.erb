@@ -21,12 +21,24 @@
               tabindex: "-1", remote: true %>
           </li>
 
+
+
+
           <li role="presentation">
             <%= link_to "Delete", answer_path(answer), method: :delete,
               id: "delete-answer-#{answer.id}", role: "menuitem",
               tabindex: "-1", remote: true, data: {confirm: "Are you sure?"} %>
           </li>
         <% end %>
+
+      <% if (current_member == answer.question.topic.room.owner) && (answer.question.member != answer.question.topic.room.owner)  %>
+        <li>
+          <%= link_to ban_member_path(member_id: answer.member.id, topic_id: answer.question.topic.id), method: :post do %>
+            <i class="fa fa-ban" aria-hidden="true" title="Ban member"></i>
+            Ban member
+          <% end %>
+        </li>
+      <% end %>
 
         <% if room.owner == current_member && !answer.moderated? %>
           <li>

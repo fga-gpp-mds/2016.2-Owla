@@ -252,5 +252,5 @@ class AnswersControllerTest < ActionDispatch::IntegrationTest
 
     assert_not_equal answer.anonymous, true
   end
-
+  
 end
