@@ -9,6 +9,7 @@ class MembersController < ApplicationController
   def index
     @members = Member.all
   end
+
   def show
     @member = Member.find(params[:id])
   end
@@ -19,6 +20,8 @@ class MembersController < ApplicationController
     if @member.save
       log_in @member
       redirect_to home_path @member
+
+      send_notification("first_notification", nil)
     else
       flash[:alert] = "Member not created"
       render 'new'
@@ -52,7 +55,7 @@ class MembersController < ApplicationController
   end
 
   def joined_rooms
-    @rooms = current_member.rooms.all
+    @rooms = current_member.rooms.all + current_member.my_rooms.all
     @subtitle = 'Joined rooms'
     render 'rooms'
   end

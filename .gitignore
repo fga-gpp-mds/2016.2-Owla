@@ -37,3 +37,6 @@ public/system/*
 
 public/system
 vendor/bundle
+public/slides
+
+config/environments/development.rb

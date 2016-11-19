@@ -1,6 +1,12 @@
 language: ruby
 
+before_script:
+  - psql -c "create user owla with createdb login password 'owla1234';" -U postgres
+  - psql -c "alter user owla with superuser;" -U postgres
+
 script:
+  - bundle exec rake db:drop
+  - bundle exec rake db:create
   - bundle exec rake db:migrate
   - bundle exec rake db:seed
   - bundle exec rake
@@ -23,3 +29,6 @@ addons:
 
 notifications:
   slack: crabsolutions:7v5QgcE6EeDv2gtP4C9r15si
+
+services:
+  - postgresql

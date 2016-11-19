@@ -1,9 +1,19 @@
 class Member < ApplicationRecord
 
+  acts_as_voter
+  
   has_many :my_rooms, class_name: 'Room', foreign_key: 'owner_id'
   has_and_belongs_to_many :rooms
   has_many :questions
   has_many :answers
+  has_many :sent_notifications, class_name: 'Notification', foreign_key: 'sender_id'
+  has_many :received_notifications, class_name: 'Notification', foreign_key: 'receiver_id'
+
+  has_many :received_reports, foreign_key: "reported_id"
+  has_many :report_moderators, foreign_key: "moderator_id"
+  has_and_belongs_to_many :reports
+
+  has_many :tags
 
   before_save { self.email = email.downcase }
 

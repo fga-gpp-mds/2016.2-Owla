@@ -1,0 +1,20 @@
+<!-- Modal -->
+<div class="modal fade" id="modal-<%= if question.valid? then question.id else "0" end %>" tabindex="-1" role="dialog" aria-labelledby="modalLabel">
+  <div class="modal-dialog" role="document">
+    <div class="modal-content">
+      <div class="modal-header">
+        <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+        <h4 class="modal-title" id="modalLabel"><%= box_title %></h4>
+      </div>
+      <div class="modal-body">
+        <%= render partial: 'questions/form', locals: { question: question,
+                                                        placeholder: placeholder,
+                                                        url: url,
+                                                        slide_id: slide_id} %>
+        <% if question.valid? %>
+          <%= button_to "Delete Question", question_path(question), class: "btn btn-flat btn-danger", data: { confirm: "Hmmm! Are you sure?" }, method: :delete %>
+        <% end %>
+      </div>
+    </div>
+  </div>
+</div>

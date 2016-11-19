@@ -6,6 +6,26 @@
 	<%= m.label :content, "Name" %>
 	<%= m.text_field :content %>
 	<br>
-	
+
+  <div class="form-group has-feedback" id="answer-attachment-box">
+    <% if @answer.attachment? %>
+      <span>
+        <i class='fa fa-paperclip'></i>
+        <%= @answer.attachment_file_name %>
+      </span>
+    <% end %>
+
+    <%= link_to "Manage attachment", "#", class: 'btn btn-primary', id: 'edit-attachment-button', remote: true %>
+  </div>
+
+  <%= m.file_field :attachment, class: 'form-control hidden', id: 'answer-attachment-link' %>
+
+  <% if @answer.attachment? %>
+    <label class='hidden' id="delete-attachment-label">
+      <%= check_box_tag 'delete_attachment', 1, false %>
+      Delete attachment?
+    </label>
+  <% end %>
+
 	<%= m.submit "Edit Answer" %>
 <% end %>

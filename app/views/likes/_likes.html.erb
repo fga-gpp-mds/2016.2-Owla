@@ -1,0 +1,6 @@
+<div id="like_button">
+  <%= link_to url, method: :post, remote: true do %>
+      <i class="fa fa-heart"></i>
+      <b id="<%= object.class.to_s.downcase%>-like-<%= object.id %>"><%= object.get_likes.size %></b>
+  <% end %>
+</div>

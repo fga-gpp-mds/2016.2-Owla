@@ -3,12 +3,12 @@
     <%= link_to home_path(current_member), class: "logo" do %>
       <!-- mini logo for sidebar mini 50x50 pixels -->
       <span class="logo-mini">
-        <img src="/images/blue_owla.png" style="max-width: 67%;">
+        <img src="/images/blue_owla.png" style="max-width: 40px;">
       </span>
       <!-- logo for regular state and mobile devices -->
       <span class="logo-lg">
-        <img src="/images/blue_owla.png" style="max-width: 20%;">
-        <b>Ow</b>la
+        <img src="/images/blue_owla.png" style="max-width: 40px;">
+        Owla
       </span>
     <% end %>
     <!-- Header Navbar: style can be found in header.less -->
@@ -23,9 +23,15 @@
     <!-- Logo -->
     <%= link_to root_path, class: "logo" do %>
       <!-- mini logo for sidebar mini 50x50 pixels -->
-      <span class="logo-mini"><b>Ow</b>la</span>
+      <span class="logo-mini">
+        <img src="/images/blue_owla.png" style="max-width: 40px;">
+        <span id="header-logo-name">Owla</span>
+      </span>
       <!-- logo for regular state and mobile devices -->
-      <span class="logo-lg"><b>Ow</b>la</span>
+      <span class="logo-lg">
+        <img src="/images/blue_owla.png" style="max-width: 40px;">
+        <span id="header-logo-name">Owla</span>
+      </span>
     <% end %>
   <% end %>
 
@@ -33,8 +39,11 @@
       <ul class="nav navbar-nav">
 
         <% if logged_in? %>
-          <li class="notifications-menu">
-            <%= link_to 'LOGOUT', logout_path, class: "dropdown-toggle" %>
+
+          <%= render 'layouts/notifications' %>
+
+          <li class="logout-link">
+            <%= link_to 'Logout', logout_path %>
           </li>
         <% end %>
 

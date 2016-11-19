@@ -1,0 +1,61 @@
+<span class="text-muted pull-right">
+  <span id="answer-<%= answer.id %>-datetime">
+    <% if answer.created_at != answer.updated_at %>
+      <span class="edited">edited</span>
+    <% else %>
+      <span class="edited hidden">edited</span>
+    <% end %>
+  </span>
+
+  <%= answer.created_at.strftime("%m/%d/%Y @ %H:%M")%>
+
+    <span class="dropdown">
+      <a class="dropdown-toggle" data-toggle="dropdown" href="#" aria-expanded="false">
+        <span class="fa fa-gear"></span>
+      </a>
+      <ul class="dropdown-menu">
+        <% if answer.member == current_member %>
+          <li role="presentation">
+            <%= link_to "Edit", edit_answer_path(answer),
+              id: "edit-answer-#{answer.id}", role: "menuitem",
+              tabindex: "-1", remote: true %>
+          </li>
+
+
+
+
+          <li role="presentation">
+            <%= link_to "Delete", answer_path(answer), method: :delete,
+              id: "delete-answer-#{answer.id}", role: "menuitem",
+              tabindex: "-1", remote: true, data: {confirm: "Are you sure?"} %>
+          </li>
+        <% end %>
+
+      <% if (current_member == answer.question.topic.room.owner) && (answer.question.member != answer.question.topic.room.owner)  %>
+        <li>
+          <%= link_to ban_member_path(member_id: answer.member.id, topic_id: answer.question.topic.id), method: :post do %>
+            <i class="fa fa-ban" aria-hidden="true" title="Ban member"></i>
+            Ban member
+          <% end %>
+        </li>
+      <% end %>
+
+        <% if room.owner == current_member && !answer.moderated? %>
+          <li>
+            <%= link_to moderate_answer_url(answer.id),
+              method: :post, id: 'moderate_answer' do %>
+              <i class="fa fa-microphone-slash" aria-hidden="true" title="Moderate question"></i>
+              Moderate answer
+            <% end %>
+          </li>
+        <% end %>
+
+        <li>
+          <%= link_to report_answer_path(answer), method: :post do %>
+            <i class="fa fa-flag" aria-hidden="true" title="Report answer"></i>
+            Report answer
+          <% end %>
+        </li>
+      </ul>
+    </span>
+</span>

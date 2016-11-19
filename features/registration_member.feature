@@ -33,5 +33,5 @@ Feature: registration_member
     When I write "testtest" on "session_password"
     When I click button "Enter"
     Then I should be in "Victor Navarro" homepage
-    When I click "LOGOUT"
+    When I click "Logout"
     Then I should be in "/"

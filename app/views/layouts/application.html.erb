@@ -1,9 +1,11 @@
 <!DOCTYPE html>
 <html>
   <head>
+    <%= javascript_include_tag 'cable' %>
     <title>Owla</title>
     <%= csrf_meta_tags %>
     <%= stylesheet_link_tag 'application', media: 'all' %>
+    <%= action_cable_meta_tag %>
   </head>
 
   <% if logged_in? %>
@@ -18,15 +20,26 @@
           <%= render "/layouts/header" %>
         </div>
 
+
         <% if logged_in? %>
           <%= render '/layouts/sidebar' %>
 
           <div class="content-wrapper">
+            <div class="flash-conteiner">
+              <% flash.each do |key, value| %>
+                <div class="alert alert-<%= key %>"><%= value %></div>
+              <% end %>
+            </div>
             <%= yield %>
           </div>
         <% else %>
           <!-- Page content -->
           <div class="container">
+            <div class="flash-conteiner">
+              <% flash.each do |key, value| %>
+                <div class="alert alert-<%= key %>"><%= value %></div>
+              <% end %>
+            </div>
             <%= yield %>
           </div>
         <% end %>
@@ -36,7 +49,7 @@
           <%= render "/layouts/footer" %>
         </div>
     </div><!-- ./wrapper -->
-    <%= javascript_include_tag 'application' %>
 
+    <%= javascript_include_tag 'application' %>
   </body>
 </html>

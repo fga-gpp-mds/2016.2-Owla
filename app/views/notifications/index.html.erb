@@ -1,0 +1,37 @@
+<!-- Content Header (Page header) -->
+<section class="content-header">
+  <h1>
+    Notifications
+  </h1>
+  <ol class="breadcrumb">
+    <li><a href="#"><i class="fa fa-dashboard"></i> Home</a></li>
+    <li class="active">notifications</li>
+  </ol>
+</section>
+
+<!-- Main content -->
+<% if !@notifications.empty? %>
+  <section class="content">
+    <!-- /.row -->
+    <div class="row">
+      <div class="col-xs-12">
+        <div class="box">
+          <div class="box-body table-responsive no-padding">
+              <table class="table table-hover">
+                <% @notifications.each do | notification | %>
+                  <tr>
+                    <td><%= notification.message %></td>
+                    <td class="see-notification"><%= link_to "See notification", notification.link, class:"label label-primary"%></td>
+                  </tr>
+                <% end %>
+              </table>
+          </div>
+          <!-- /.box-body -->
+        </div>
+        <!-- /.box -->
+      </div>
+    </div>
+  </section>
+<% else %>
+  <h1 class="empty-notifications"><small>You have no notifications!</small></h1>
+<% end %>

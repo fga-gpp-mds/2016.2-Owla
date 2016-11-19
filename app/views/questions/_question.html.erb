@@ -1,0 +1,140 @@
+<div class="col-md-6 pull-right" id="question-<%= question.id %>">
+  <div class="box box-widget">
+    <div class="box-header with-border">
+
+      <div class="user-block">
+
+        <% if question.anonymous %>
+          <% if(current_member == question.member ||
+                current_member == room.owner)  %>
+
+            <%= image_tag (question.member.avatar.url(:thumb)),
+                class: "img-circle img-sm",
+                alt: "User Image",
+                style: "max-width: 56px;" %>
+
+            <span class="username">
+              <a href="#">
+                <%= question.member.alias %>
+              </a>    <span class="fa fa-eye-slash"></span>
+            </span>
+          <% else %>
+
+            <%= image_tag "/images/missing.png", class: "img-circle img-sm",
+              alt: "User Image", style: "max-width: 56px;" %>
+            <span class="username">
+              <%= "Anonymous" %>
+            </span>
+
+          <% end %>
+        <% else %>
+
+          <%= image_tag (question.member.avatar.url(:thumb)),
+              class: "img-circle img-sm",
+              alt: "User Image",
+              style: "max-width: 56px;" %>
+
+          <span class="username">
+            <a href="#"><%= question.member.alias %></a>
+          </span>
+        <% end %>
+        <span class="description">Created at <%= question.created_at.strftime("%m/%d/%Y @ %H:%M")%></span>
+      </div>
+
+      <%= render partial: 'questions/question_control',
+        locals: { question: question, room: room } %>
+
+      <!-- TODO: FIX -->
+      <% color_generator = 0 %>
+      <% question.tags.each do |tag| %>
+        <% case color_generator %>
+          <% when 0 %>
+            <span class="label bg-green"><%= tag.content %></span>
+          <% when 1 %>
+            <span class="label bg-red"><%= tag.content %></span>
+          <% when 2 %>
+            <span class="label bg-yellow"><%= tag.content %></span>
+          <% when 3 %>
+            <span class="label bg-purple"><%= tag.content %></span>
+          <% when 4 %>
+            <span class="label bg-blue"><%= tag.content %></span>
+        <% end %>
+        <% if color_generator < 4 %>
+          <% color_generator += 1 %>
+        <% else %>
+          <% color_generator = 0 %>
+        <% end %>
+      <% end %>
+      <br></br>
+
+    </div>
+
+    <div class="box-body">
+      <span class="question-content">
+        <%= question.content.html_safe %>
+      </span>
+      <br><br>
+
+      <div class="row col-xs-12" id="question-control">
+
+        <%= link_to 'Tags', question_tags_path(question),
+            class: 'btn btn-xs btn-flat btn-primary'%>
+
+        <%= render partial: 'likes/likes', locals: { url: like_question_path(question.id), object: question } %>
+
+        <span class="text-muted pull-right">
+          <span id="question-answers-counter-<%= question.id %>">
+            <%= question.answers.count %>
+          </span> answers
+        </span>
+
+      </div>
+
+      <div class="question-attachment">
+        <% if question.attachment? %>
+          <%= link_to "", question.attachment.url(:original, false),
+              target: '_blank', class: 'fa fa-paperclip btn btn-xs \
+              btn-flat btn-primary pull-right',
+              id: "attachment-question" %>
+        <% end %>
+      </div>
+    </div><!-- /.box-body -->
+
+    <div class="box-footer box-comments" id="box-question-<%= question.id %>">
+      <% question.answers.each do |answer| %>
+        <%= render partial: 'answers/answer', locals: { answer: answer,
+                                                        room: room } %>
+      <% end %> <!-- answer loop -->
+    </div>
+
+    <div class="box-footer">
+      <%= image_tag (current_member.avatar.url(:thumb)),
+          class: "img-circle img-sm",
+          alt: "User Image",
+          style: "max-width: 56px;" %>
+      <div class="img-push">
+        <%= form_for new_answer, url: { action: "create",
+                                        controller: "answers",
+                                        id: nil,
+                                        question_id: question.id},
+          remote: true do |f| %>
+          <div class="input-group">
+            <%= f.text_field :content,
+                             class:"form-control content-text",
+                             placeholder: "Answer here" %>
+            <%= f.check_box :anonymous %>
+            <%= f.label :anonymous %>
+
+            <div class="input-group-btn">
+              <%= button_tag(type: "submit",
+                             class: "btn btn-flat btn-danger",
+                             id: "Buttonflag") do %>
+                <i class="fa fa-send-o"></i>
+              <% end %>
+            </div>
+          </div>
+        <% end %>
+      </div>
+    </div>
+  </div>
+</div>

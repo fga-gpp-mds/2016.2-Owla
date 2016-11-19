@@ -1,0 +1,33 @@
+<li class="notifications-link">
+  <%= link_to '#', class: 'dropdown-toggle', id: 'notification-dropdown', data: { toggle: 'dropdown' } do %>
+    <i class='fa fa-bell'></i>
+    <!-- FIXME remove counter when dropdown is clicked -->
+    <% counter = current_member.received_notifications.where(read: "false").count %>
+    <% if counter != 0 %>
+      <span class="label label-danger" id="notification-counter">
+        <%= counter %>
+      </span>
+    <% end %>
+
+    <ul class="dropdown-menu">
+      <% current_member.received_notifications.reverse.take(3).each do |notification| %>
+        <li>
+          <ul class="menu" id="dropdown-menu">
+            <% if !current_member.received_notifications.empty? %>
+                <li id="notification-list">
+                  <p><%= link_to notification.message, notification.link %></p>
+                  <% notification.update_attribute(:read, true) %>
+                </li>
+                <li class="divider"></li>
+              <% end %>
+          </ul>
+        </li>
+      <% end %>
+      
+      <li>
+        <%= link_to "See all", notifications_path %>
+      </li>
+    </ul>
+
+  <% end %>
+</li>

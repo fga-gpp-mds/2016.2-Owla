@@ -14,20 +14,16 @@ class QuestionControllerTest < ActionDispatch::IntegrationTest
     @topic = @room.topics.new(name: "limites", description: "description1")
     @topic.save
 
-    @question = @topic.questions.new(content: "How did I get here?")
+    attachment = fixture_file_upload('test/fixtures/sample_files/file.png', 'image/png')
+
+    @question = @topic.questions.new(content: "How did I get here?", attachment: attachment)
     @question.member = @member
     @question.save
 
     sign_in_as @member
   end
 
-  test "should get new" do
-    get new_topic_question_path(@topic)
-    assert_response :success
-  end
-
   test "should get show" do
-
     get question_path(@question)
     assert_response :success
   end
@@ -38,14 +34,17 @@ class QuestionControllerTest < ActionDispatch::IntegrationTest
         content: "How did I get here?",
       }
     }
-    assert_redirected_to topic_path(@topic)
+
+    assert_response :success
   end
 
   test "should edit question" do
     question_content = @question.content
 
     patch "/questions/#{@question.id}", params: {
-      question: { content: "Derivadas?" }
+      question: {
+        content: "Derivadas?"
+      }
     }
 
     @question.reload
@@ -58,7 +57,9 @@ class QuestionControllerTest < ActionDispatch::IntegrationTest
     question_id = @question.id
     question_content = @question.content
     patch "/questions/#{question_id}", params: {
-      question: { content: "Derivadas?" }
+      question: {
+        content: "Derivadas?"
+      }
     }
 
     @question.reload
@@ -104,21 +105,17 @@ class QuestionControllerTest < ActionDispatch::IntegrationTest
     assert_equal question.anonymous, false
   end
 
-  # ACCEPTANCE TEST
-  test "should not show member name and avatar to other users if question is anonymous" do
 
+  test "question should have one like after button click" do
+    post "/questions/#{@question.id}/like"
+    assert_equal 1, @question.votes_for.size
   end
 
-  # ACCEPTANCE TEST
-  test "should show member name and avatar if the question is anonymous and current member is the author of the question" do
-
+  test "boolean attribute should change"  do 
+    post "/questions/#{@question.id}/like"
+    assert @question.upvote_by(@member), true
   end
-
-  # ACCEPTANCE TEST
-  test "should show member name and avatar if the question is anonymous and current member is the owner of the room" do
-
-  end
-
+  
   test "only room owner should moderate question" do
     @member2 = Member.create(name: "Thalissonn", alias: "thalissonn", email: "thalissnon@gmail.com", password: "12345678", password_confirmation: "12345678")
     sign_out_as @member
@@ -132,8 +129,86 @@ class QuestionControllerTest < ActionDispatch::IntegrationTest
   test "should message content and moderated attribute change if moderated" do
     post "/moderate_question/#{@question.id}"
     @question.reload
+
     assert_equal true, @question.moderated?
     assert_equal "This question has been moderated because it's content was considered inappropriate", @question.content
+  end
+
+  test "should upload attachment when question is created" do
+    attachment = fixture_file_upload('test/fixtures/sample_files/file.png', 'image/png')
+
+    assert_difference('Question.count') do
+      post "/topics/#{@topic.id}/questions", params: {
+        question: {
+          content: "Question test",
+          attachment: attachment
+        }
+      }
+    end
+
+  end
+
+  test "should not upload wrong type of attachment" do
+    wrong_attachment = fixture_file_upload('test/fixtures/answers.yml', 'application/yaml')
+
+    old_question = Question.last
+
+    post "/topics/#{@topic.id}/questions", params: {
+      question: {
+        content: "Testing wrong attachment",
+        attachment: wrong_attachment
+      }
+    }
+
+    assert_equal old_question, Question.last
+  end
+
+  test "should delete attachment from question if option is marked" do
+    question = Question.last
+
+    patch "/questions/#{question.id}", params: {
+      question: {
+        content: "new question content"
+      },
+      delete_attachment: true
+    }
+
+    question.reload
+
+    assert_not question.attachment?
+  end
+
+  test "should not delete attachment if option is not marked" do
+    question = Question.last
+
+    patch "/questions/#{question.id}", params: {
+      question: {
+        content: "new question content"
+      }
+    }
+
+    question.reload
+
+    assert question.attachment?
+  end
+
+  # FIXME acceptance test
+  test "should not show member name and avatar to other users if question is anonymous" do
+
+  end
+
+  # FIXME acceptance test
+  test "should show member name and avatar if the question is anonymous and current member is the author of the question" do
+
+  end
+
+  # FIXME acceptance test
+  test "should show member name and avatar if the question is anonymous and current member is the owner of the room" do
+
+  end
+
+  # FIXME acceptance test
+  test "should get new" do
   end
 
 end

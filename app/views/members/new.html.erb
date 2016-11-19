@@ -1,15 +1,11 @@
 <section class="register-content content-header">
   <div class="register-box">
-    <div class="register-logo">
-      <b>Register</b>Yourself
-    </div>
-
     <div class="register-box-body">
-      <p class="login-box-msg">So fast that you do not feel!</p>
+      <p class="login-box-msg">Create your account</p>
 
       <%= form_for @member do |m| %>
         <div class="form-group has-feedback">
-          <%= m.text_field :name, class: 'form-control', placeholder:'Full name' %>
+          <%= m.text_field :name, class: 'form-control', placeholder:'Full name', autofocus: true %>
           <span class="glyphicon glyphicon-user form-control-feedback"></span>
         </div>
         <div class="form-group has-feedback">
@@ -29,7 +25,8 @@
           <span class="glyphicon glyphicon-log-in form-control-feedback"></span>
         </div>
         <div class="form-group has-feedback">
-            <%= m.file_field :avatar, class: 'form-control' %>
+          <%= m.label "Choose your photo" %>
+          <%= m.file_field :avatar, class: 'form-control' %>
         </div>
         <div class="row">
           <div class="col-xs-8">
@@ -42,7 +39,7 @@
           <!-- /.col -->
        <% end %>
 
-       <%= link_to 'I already have a membership' , root_path, class:"text-center" %>
+       <%= link_to 'I already have an account' , root_path, class:"text-center" %>
     </div>
     <!-- /.form-box -->
   </div>

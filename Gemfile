@@ -3,10 +3,12 @@ source 'https://rubygems.org'
 
 # Bundle edge Rails instead: gem 'rails', github: 'rails/rails'
 gem 'rails', '~> 5.0.0', '>= 5.0.0.1'
-# Use sqlite3 as the database for Active Record
-gem 'sqlite3'
+# Use postgres as the database for Active Record
+gem 'pg', '~> 0.18'
 # Use Puma as the app server
 gem 'puma', '~> 3.0'
+# Gem to get instances variables in test
+gem 'rails-controller-testing'
 # Use SCSS for stylesheets
 gem 'sass-rails', '~> 5.0'
 # Use Uglifier as compressor for JavaScript assets
@@ -20,14 +22,24 @@ gem 'bcrypt', '3.1.11'
 # Build JSON APIs with ease. Read more: https://github.com/rails/jbuilder
 gem 'jbuilder', '~> 2.5'
 # Use Redis adapter to run Action Cable in production
-# gem 'redis', '~> 3.0'
+gem 'redis', '~> 3.0'
 # Use ActiveModel has_secure_password
 # gem 'bcrypt', '~> 3.1.7'
-# Paperclip for profile image
+# Paperclip for profile image and file upload for questions and answers
 gem "paperclip", "~> 4.3"
+# Gem to convert PDF files to JPG files
+gem 'rmagick'
 # Use Capistrano for deployment
 # gem 'capistrano-rails', group: :development
+
+# Text editor
+gem 'bootstrap-wysihtml5-rails'
+
+# Boosttrap switch
+gem "bootstrap-switch-rails"
+
 gem "codeclimate-test-reporter", group: :test, require: nil
+gem 'acts_as_votable', '~> 0.10.0'
 
 group :cucumber do
   gem 'capybara',               '~> 2.2'

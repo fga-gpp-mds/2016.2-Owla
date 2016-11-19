@@ -1,3 +1,20 @@
 // Place all the styles related to the question controller here.
 // They will automatically be included in application.css.
 // You can use Sass (SCSS) here: http://sass-lang.com/
+
+#question-attachment-box {
+    padding-bottom: 15px;
+}
+
+#edit-attachment-button {
+    float: right;
+}
+
+#submit-question-button {
+    margin-top: 30px;
+}
+
+#question-control {
+    margin-right: 15px;
+    width: 106%;
+}

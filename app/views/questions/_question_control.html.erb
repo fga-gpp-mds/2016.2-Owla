@@ -1,0 +1,42 @@
+<div class="box-tools">
+  <span class="dropdown">
+    <a class="dropdown-toggle" data-toggle="dropdown" href="#" aria-expanded="false">
+      <span class="fa fa-gear"></span>
+    </a>
+    <ul class="dropdown-menu">
+      <li>
+        <%= link_to report_question_path(question), method: :post do %>
+          <i class="fa fa-flag" aria-hidden="true" title="Report Question"></i>
+          Report question
+        <% end %>
+      </li>
+
+      <% if (current_member == question.topic.room.owner) && (question.member != question.topic.room.owner)  %>
+        <li>
+          <%= link_to ban_member_path(member_id: question.member.id), method: :post do %>
+            <i class="fa fa-ban" aria-hidden="true" title="Ban member"></i>
+            Ban member
+          <% end %>
+        </li>
+      <% end %>
+
+      <% if current_member == question.member %>
+        <li>
+          <a href="#" data-toggle="modal" data-target="#modal-<%=question.id%>">
+            <i class="fa fa-pencil" aria-hidden="true" title="Edit question"></i>
+            Edit question
+          </a>
+        </li>
+      <% end %>
+
+      <% if room.owner == current_member && !question.moderated? %>
+        <li>
+          <%= link_to moderate_question_url(question.id), method: :post do %>
+            <i class="fa fa-microphone-slash" aria-hidden="true" title="Moderate question"></i>
+            Moderate question
+          <% end %>
+        </li>
+      <% end %>
+    </ul>
+  </span>
+</div>

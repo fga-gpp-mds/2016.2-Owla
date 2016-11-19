@@ -44,7 +44,7 @@
                 <td><%= room.name %></td>
                 <td><%= room.created_at.strftime("%m/%d/%Y") %></td>
                 <td><%= room.description %></td>
-                <td><%= link_to 'Visit', room_path(room), class:"label label-success"%></td>
+                <td><%= link_to 'Visit', room_path(room), class:"label label-success" %></td>
               </tr>
             <% end %>
           </table>

@@ -1,14 +1,20 @@
 // Do not edit !important flags, they are overwriting
 // some CSS attributes of the AdminLTE template
 
-.initial-page {
-  background: image-url("login_bg.png"), image-url("login-bg-repeat.jpg") !important;
-  background-position: center, left !important;
-  background-repeat: no-repeat, repeat !important;
+.container {
+  width: 100%;
+  padding-right: 0px;
+  padding-left: 0px;
+  margin-left: 0px;
+  margin-right: 0px;
   height: 100%;
 }
 
-.slide-login {
-  height: 650px !important;
-  width: 100%;
+.initial-page {
+  margin-top: 120px;
+}
+
+#owla-logo {
+  width: 105%;
+  max-width: 600px;
 }

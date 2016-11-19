@@ -10,6 +10,7 @@
   </ol>
 </section>
 
+
 <!-- Main content -->
 <section class="content">
   <div class="row">
@@ -21,14 +22,18 @@
         </div>
         <!-- /.box-header -->
         <div class="box-body">
-          <%= form_for @topic, url: @url do |topic| %>
+          <%= form_for @topic, url: url do |f| %>
             <!-- text input -->
             <div class="form-group">
-              <%= topic.text_field :name, class:"form-control", placeholder: @placeholder_name %>
+              <%= f.text_field :name, class:"form-control", placeholder: @placeholder_name %>
             </div>
             <!-- textarea -->
             <div class="form-group">
-              <%= topic.text_area :description, class:"form-control", placeholder: @placeholder_description %>
+              <%= f.text_area :description, class:"form-control", placeholder: @placeholder_description %>
+            </div>
+            <!-- filefield -->
+            <div class="form-group">
+              <%= f.file_field :slide, class:"form-control" %>
             </div>
             <%= button_tag(type: "submit", class: "btn btn-app pull-right") do %>
                 <i class="fa fa-save"></i>
@@ -40,6 +45,7 @@
       <!-- /.box -->
       <div class="input-group margin">
         <div class="input-group-btn">
+          <!-- FIXME change this condition -->
           <% if @topic.valid? %>
             <%= button_to "Delete Topic", topic_path(@topic), class: "btn btn-flat btn-danger", data: { confirm: "Hmmm! Are you sure?" }, method: :delete %>
           <% end %>

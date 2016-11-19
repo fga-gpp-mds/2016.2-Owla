@@ -12,7 +12,11 @@ class SessionsController < ApplicationController
       redirect_to home_path(member)
       flash[:success] = 'Log in bem-sucedido!'
     else
-      flash.now[:danger] = 'Invalid username or password'
+      if Member.find_by(email: params[:session][:email])
+        flash.now[:danger] = 'Invalid password'
+      else
+        flash.now[:danger] = 'Invalid email or password'
+      end
       render 'new'
     end
   end

@@ -1,0 +1,11 @@
+<h1>Edit Tag</h1>
+<% if flash[:alert] %>
+    <div class="notice"><%= flash[:alert] %></div>
+<% end %>
+<%= form_for @tag do |m| %>
+	<%= m.label :content, "Name" %>
+	<%= m.text_field :content %>
+	<br>
+	
+	<%= m.submit "Edit Tag" %>
+<% end %>

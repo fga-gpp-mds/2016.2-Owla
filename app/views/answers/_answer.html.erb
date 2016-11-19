@@ -1,0 +1,65 @@
+<div class="box-comment" id="box-answer-<%= answer.id %>">
+  <% if answer.anonymous %>
+      <% if(current_member == answer.member || current_member == room.owner) %>
+
+        <%= image_tag answer.member.avatar.url(:thumb),
+        class: "img-circle img-sm user-image",
+          alt: "User Image", style: "max-width: 56px;" %>
+        <div class="comment-text">
+          <span class="username">
+            <span id="username">
+              <a href="#"><%= answer.member.alias %></a>    <span class="fa fa-eye-slash"></span>
+            </span>
+            <%= render partial: 'answers/answer_control',
+                       locals: { answer: answer,
+                                 current_member: current_member,
+                                 room: room } %>
+          </span>
+      <% else %>
+        <%= image_tag "/images/missing.png", class: "img-circle img-sm",
+          alt: "User Image", style: "max-width: 56px;" %>
+        <div class="comment-text">
+          <span class="username">
+            <span id="username">
+              Anonymous
+            </span>
+            <%= render partial: 'answers/answer_control',
+                       locals: { answer: answer,
+                                 current_member: current_member,
+                                 room: room } %>
+          </span>
+      <% end %>
+  <% else %>
+
+    <%= image_tag (answer.member.avatar.url(:thumb)),
+          class: "img-circle img-sm",
+          alt: "User Image",
+          style: "max-width: 56px;" %>
+    <div class="comment-text">
+      <span class="username">
+        <span id="username">
+          <a href="#"><%= answer.member.alias %></a>
+          <%= render partial: 'answers/answer_control',
+                     locals: { answer: answer,
+                               current_member: current_member,
+                               room: room } %>
+        </span>
+      </span>
+
+  <% end %>
+    <span id="answer-content-<%= answer.id %>">
+      <%= answer.content %>
+    </span>
+  </div><!-- all the .comment-text, do not remove-->
+
+    <div class="answer-attachment">
+      <% if answer.attachment? %>
+        <%= link_to "", answer.attachment.url(:original, false),
+        target: '_blank', class: 'fa fa-paperclip btn btn-xs\
+        btn-flat btn-primary pull-right', id: "attachment-answer" %>
+      <% end %>
+    </div>
+
+    <%= render partial: 'likes/likes', locals: { url: like_answer_path(answer), object: answer } %>
+
+</div> <!-- .box-comment -->

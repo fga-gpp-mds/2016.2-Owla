@@ -1,3 +1,0 @@
-module AnswersHelper
-	
-end
